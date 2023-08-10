@@ -99,7 +99,7 @@ def negative_qc_statement(irma_reads_df, negative_list=""):
     statement_dic = {"passes QC": {}, "FAILS QC": {}}
     for s in negative_list:
         try:
-            reads_mapping = irma_reads_df.loc[s, "Percent Mapping"] * 100
+            reads_mapping = irma_reads_df.loc[str(s), "Percent Mapping"] * 100
         except KeyError:
             reads_mapping = 0
         if reads_mapping >= 0.01:
