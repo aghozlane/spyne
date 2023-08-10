@@ -3,9 +3,9 @@
 # Wrapper to install downloaded packages 
 
 PACKAGE_ROOT=/opt/bbtools
-RESOURCE_ROOT=/spyne
-bbtools_orig=${RESOURCE_ROOT}/bbtools/bbtools_file.txt
-bbtools_clean=${RESOURCE_ROOT}/bbtools/bbtools_file_clean.txt
+RESOURCE_ROOT=/spyne/bbtools
+bbtools_file=${RESOURCE_ROOT}/bbtools_file.txt
+bbtools_file_cleaned=${RESOURCE_ROOT}/bbtools_file_cleaned.txt
 
 # Make the bbtools directory exits, if not, create it
 if [[ ! -d ${PACKAGE_ROOT} ]]
@@ -14,30 +14,32 @@ then
 fi
 
 # Extract bbmap package to the bbtools directory
-if [[ -f ${bbtools_orig} ]]
+if [[ -f ${bbtools_file} ]]
 then
 
 	echo "Install bbtools"
 
 	# Remove blank lines from the file and save a cleaner version of it
-	awk NF < ${bbtools_orig} > ${bbtools_clean}
+	awk NF <${bbtools_file} > ${bbtools_file_cleaned}
 
 	# Get number of rows in bbtools_file_clean.txt
-	n=`wc -l < ${bbtools_clean}`
+	n=`wc -l < ${bbtools_file_cleaned}`
 	i=1
 
 	# Wget the file and install the package
-	while [[ i -le $n ]];
+	while [[ i -le $n ]]
 	do
 		echo $i
-		file=$(head -${i} ${bbtools_clean} | tail -1 | sed 's,\r,,g')
+		file=$(head -${i} ${bbtools_file_cleaned} | tail -1 | sed 's,\r,,g')
 		echo $file
-		sudo tar -zxf ${RESOURCE_ROOT}/bbtools/${file} -C ${PACKAGE_ROOT}
+		if [[ -f ${RESOURCE_ROOT}/${file} ]]
+		then
+			sudo tar -zxf ${RESOURCE_ROOT}/${file} -C ${PACKAGE_ROOT}
+			rm -rf ${RESOURCE_ROOT}/${file}
+		fi
 		i=$(($i+1))
-		rm -rf ${RESOURCE_ROOT}/bbtools/${file}
 	done
 
-	# return message to keep the process going
 	echo "Done"
 
 fi

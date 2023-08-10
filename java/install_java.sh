@@ -3,9 +3,7 @@
 # Wrapper to install downloadeded packages 
 
 PACKAGE_ROOT=/opt/java
-RESOURCE_ROOT=/spyne
-java_orig=${RESOURCE_ROOT}/java/java_file.txt
-java_clean=${RESOURCE_ROOT}/java/java_file_clean.txt
+java_file=${PWD}/java_file.txt
 
 # Make the bbtools directory exits, if not, create it
 if [[ ! -d ${PACKAGE_ROOT} ]]

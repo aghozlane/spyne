@@ -1,0 +1,64 @@
+version: "3.9"
+
+x-dais-version:
+  &dais-version 
+  public.ecr.aws/n3z8t4o2/dais-ribosome:1.3.2
+
+x-irma-version:
+  &irma-version 
+  public.ecr.aws/n3z8t4o2/irma:1.0.5
+
+x-spyne-git-version:
+  &spyne-git-version  
+  https://github.com/cdcgov/spyne.git#java_update
+
+x-data-volume:
+  &data-volume
+  type: bind
+  source: /path/to/data
+  target: /data
+
+x-docker-volumes:
+  &docker-socket
+  type: bind
+  source: /var/run/docker.sock 
+  target: /var/run/docker.sock
+
+services:
+  dais: 
+    container_name: dais
+    image: *dais-version
+    restart: always
+    networks:
+      - backend
+    volumes: 
+      - *data-volume
+    command: tail -f /dev/null
+
+  irma: 
+    container_name: irma
+    image: *irma-version
+    restart: always
+    networks:
+      - backend
+    volumes:
+      - *data-volume
+    command: tail -f /dev/null
+
+  spyne: 
+    container_name: spyne
+    image: spyne
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - backend
+    volumes:
+      - *data-volume
+      - *docker-socket
+    command: tail -f /dev/null
+
+networks:
+  backend:
+    name: backend
