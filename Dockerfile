@@ -8,15 +8,17 @@ FROM --platform=$BUILDPLATFORM ubuntu:focal AS build
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install system libraries of general use
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update --allow-releaseinfo-change && apt-get install --no-install-recommends -y \
     build-essential \ 
     iptables \
     libdevmapper1.02.1 \
-    openjdk-11-jdk ca-certificates-java \
+    openjdk-11-jdk \
+    ca-certificates-java \    
     python3.8 \
     python3-pip \
     python3-setuptools \
     python3-dev \
+    docker.io \
     dpkg \
     sudo \
     wget \
@@ -27,7 +29,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 # Build from the base image for prod
 FROM ubuntu:focal as final
-SHELL ["/bin/bash", "-c"]
 
 # Copy the build stage 
 COPY --from=build / /
@@ -67,23 +68,6 @@ RUN chmod a+x ${PROGRAM}/bbtools/install_bbtools.sh
 
 # Execute bash script to wget the file and tar the package
 RUN bash ${PROGRAM}/bbtools/install_bbtools.sh
-
-############# Install Docker ##################
-
-# Set program directory as working directory to build required tools
-WORKDIR ${PROGRAM}/docker
-
-# Copy all files to docker images
-COPY docker/* ${PROGRAM}/docker
-
-# Convert bash script from Windows style line endings to Unix-like control characters
-RUN dos2unix ${PROGRAM}/docker/install_docker.sh
-
-# Allow permission to excute the bash script
-RUN chmod a+x ${PROGRAM}/docker/install_docker.sh
-
-# Execute bash script to wget the file and tar the package
-RUN bash ${PROGRAM}/docker/install_docker.sh
 
 ############# Install python packages ##################
 
