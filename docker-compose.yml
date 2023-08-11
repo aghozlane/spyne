@@ -8,10 +8,6 @@ x-irma-version:
   &irma-version 
   public.ecr.aws/n3z8t4o2/irma:1.0.5
 
-x-spyne-git-version:
-  &spyne-git-version  
-  https://github.com/cdcgov/spyne.git#java_update
-
 x-data-volume:
   &data-volume
   type: bind
@@ -47,10 +43,7 @@ services:
 
   spyne: 
     container_name: spyne
-    image: spyne
-    build: 
-      context: *spyne-git-version 
-      dockerfile: Dockerfile
+    image: rchau88/spyne
     restart: always
     networks:
       - backend
