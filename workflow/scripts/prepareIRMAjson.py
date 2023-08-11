@@ -595,7 +595,7 @@ def createheatmap(irma_path, coverage_medians_df):
     else:
         cov_header = "Coverage Depth"
     coverage_medians_df = (
-        coverage_medians_df.pivot(index="Sample", columns="Segment", values=cov_header)
+        coverage_medians_df.pivot(index="Sample", columns="Segment")
         .fillna(0)
         .reset_index()
         .melt(id_vars="Sample", value_name=cov_header)

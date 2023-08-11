@@ -120,8 +120,8 @@ def dash_irma_sample_type(reads_df):
     type_df = reads_df[reads_df['Record'].str[0] == '4']
     new_cols = ['vtype', 'ref_type', 'subtype']
     for n, cols in enumerate(new_cols):
-        type_df[cols] = type_df['Record'].apply(lambda x: read_record2type(x)[n])
-    type_df['Reference'] = type_df['Record'].apply(lambda x: x.split('_')[0][2:])
+        type_df[cols] = type_df.loc['Record'].apply(lambda x: read_record2type(x)[n])
+    type_df['Reference'] = type_df.loc['Record'].apply(lambda x: x.split('_')[0][2:])
     type_df = type_df[["Sample", "vtype", "ref_type", "subtype"]]
     return type_df
 
