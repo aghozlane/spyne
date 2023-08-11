@@ -15,7 +15,7 @@ x-spyne-git-version:
 x-data-volume:
   &data-volume
   type: bind
-  source: /path/to/data
+  source: /c/users/snu3-su/github/cdcgov/FLU_SC2_SEQUENCING
   target: /data
 
 x-docker-volumes:

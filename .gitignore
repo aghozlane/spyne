@@ -10,3 +10,6 @@ workflow/scripts/__pycache__/irma2pandas.cpython-37.pyc
 *.pyc
 
 .Rproj.user
+Dockerfile-v1
+Dockerfile-v2
+docker-compose-rc.yml
